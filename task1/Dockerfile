@@ -7,15 +7,16 @@ WORKDIR /app
 # Copy all files to the container's /app directory
 COPY . /app/
 
+# Set environment variable for the port
+ENV PORT=5252
+
 # Update package lists and upgrade installed software
 RUN apt-get update && apt-get upgrade -y \
     # Install python3 and python3-pip
-    && apt-get install -y python3 python3-pip \
-    # Remove EXTERNALLY-MANAGED if it exists to allow pip installs
-    && rm -f /usr/lib/python*/EXTERNALLY-MANAGED
+    && apt-get install python3 -y \
+    && apt-get install python3-pip -y
 
-# Install Flask using pip3
-RUN pip3 install flask
+RUN pip install flask --break-system-packages
 
 # Set the default command to run the Flask app
 CMD ["python3", "api.py"]
